@@ -25,3 +25,60 @@ sudo service redis-server start
 redis-cli 
 127.0.0.1:6379> ping
 PONG
+
+# Redis commands
+https://redis.io/docs/manual/cli/
+
+ubuntu@Thinkpad:~$ redis-cli
+127.0.0.1:6379> GET greeting
+"good morning"
+127.0.0.1:6379> SET greeting "Good Evening"
+OK
+127.0.0.1:6379> GET greeting
+"Good Evening"
+127.0.0.1:6379>
+
+# scanning for keys
+
+ubuntu@Thinkpad:~$ redis-cli --scan
+greeting
+
+# setting expiration and checking for expiration
+
+ubuntu@Thinkpad:~$ redis-cli
+127.0.0.1:6379> GET greeting
+"good morning"
+127.0.0.1:6379> SET greeting "Good Evening"
+OK
+127.0.0.1:6379> GET greeting
+"Good Evening"
+127.0.0.1:6379>
+127.0.0.1:6379> EXPIRE greeting 60
+(integer) 1
+127.0.0.1:6379> TTL greeting
+(integer) 53
+127.0.0.1:6379> TTL greeting
+(integer) 49
+127.0.0.1:6379> TTL greeting
+(integer) 39
+127.0.0.1:6379> get greeting
+"Good Evening"
+127.0.0.1:6379> TTL greeting
+(integer) 29
+127.0.0.1:6379> TTL greeting
+(integer) 16
+127.0.0.1:6379> TTL greeting
+(integer) -2
+127.0.0.1:6379> TTL greeting
+(integer) -2
+127.0.0.1:6379> get greeting
+(nil)
+127.0.0.1:6379>
+
+# get keys matching a pattern and DELETE it
+ubuntu@Thinkpad:~$ redis-cli --scan --pattern "My*"
+Mykey
+ubuntu@Thinkpad:~$ redis-cli --scan --pattern "My*" | xargs redis-cli DEL
+(integer) 1
+ubuntu@Thinkpad:~$ redis-cli --scan --pattern "My*"
+ubuntu@Thinkpad:~$
